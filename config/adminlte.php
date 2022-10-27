@@ -229,6 +229,21 @@ return [
             'url'  => '/users',
             'icon'  => 'fa fa-users',
         ],
+        [
+            'text' => 'Books',
+            'url'  => '/books',
+            'icon'  => 'fa fa-book',
+        ],
+        [
+            'text' => 'Meminjam',
+            'url'  => '/borrows',
+            'icon'  => 'fa fa-minus',
+        ],
+        [
+            'text' => 'Mengembalikan',
+            'url'  => '/returns',
+            'icon'  => 'fa fa-plus',
+        ],
     ],
 
     /*
