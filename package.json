@@ -19,5 +19,9 @@
         "postcss": "^8.1.14",
         "sass": "^1.15.2",
         "sass-loader": "^8.0.0"
+    },
+    "dependencies": {
+        "multer": "^1.4.5-lts.1",
+        "path": "^0.12.7"
     }
 }

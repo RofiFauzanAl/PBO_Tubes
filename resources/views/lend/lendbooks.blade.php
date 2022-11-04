@@ -29,9 +29,11 @@
                                 <td>{{$buk->genreBuku}}</td>
                                 <td>{{$buk->jumlahBuku}}</td>
                                 <td>
-                                    <a href="{{route('borrows.pinjam', $buk)}}" class="btn btn-primary btn-xs">
-                                        Pinjam
-                                    </a>
+                                    <form action="{{route('setUpdate', $buk)}}" method="post">
+                                        @method('PUT')
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary">Pinjam</button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

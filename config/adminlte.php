@@ -244,6 +244,11 @@ return [
             'url'  => '/returns',
             'icon'  => 'fa fa-plus',
         ],
+        [
+            'text' => 'Data Transaksi',
+            'url'  => '/transaksi',
+            'icon'  => 'fa fa-envelope',
+        ],
     ],
 
     /*

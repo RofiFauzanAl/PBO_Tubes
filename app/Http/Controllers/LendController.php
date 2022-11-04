@@ -14,12 +14,19 @@ class LendController extends Controller
             'buku' => $buku
         ]);
     }
-    
-    public function pinjam(Request $request,$id)
+
+    public function update($id)
     {
-        $buku = Buku::find($id)->decrement($request->input('jumlahBuku'));
-        $buku->save();
-        return redirect()->route('books.index')
-            ->with('success_message', 'Berhasil menghapus buku');
+        try{
+            $buku = Buku::find($id);
+            $buku->jumlahBuku = $buku->jumlahBuku - 1;
+            $buku->save();
+            return redirect()->route('getIndex')
+                ->with('success_message', 'Berhasil meminjam buku');
+                            
+        }
+        catch(Exception $e){
+            
+        }
     }
 }

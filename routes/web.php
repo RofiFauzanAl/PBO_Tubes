@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Buku;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+$lend = new \App\Http\Controllers\LendController();
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,8 +27,13 @@ Route::resource('users', \App\Http\Controllers\UserController::class)
 Route::resource('books', \App\Http\Controllers\BookController::class)
     ->middleware('auth');
 
-Route::resource('borrows', \App\Http\Controllers\LendController::class)
-    ->middleware('auth');
+// Untuk Meminjam
+Route::get('/borrows', '\App\Http\Controllers\LendController@index')->name('getIndex');
+Route::put('/borrows/{id}', '\App\Http\Controllers\LendController@update')->name('setUpdate');
+
+// Route::get('/borrows', $lend.index());
+
+// Route::post('/borrows/:id', \App\Http\Controllers\BookController::class);
 
 Route::get('/home', function() {
     return view('home');

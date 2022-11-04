@@ -24,18 +24,28 @@ class BookController extends Controller
     public function store(Request $request){
         try{
             $buku = new Buku();
-            $buku->namaBuku = $request->input('namaBuku');
-            $buku->author = $request->input('author');
-            $buku->genreBuku = $request->input('genreBuku');
-            $buku->jumlahBuku = $request->input('jumlahBuku');
+            $data = [
+                $namaBuku = $request->input('namaBuku'),
+                $author = $request->input('author'),
+                $genreBuku = $request->input('genreBuku'),
+                $jumlahBuku = $request->input('jumlahBuku')
+            ];
+            $buku->namaBuku = $data[0];
+            $buku->author = $data[1];
+            $buku->genreBuku = $data[2];
+            $buku->jumlahBuku = $data[3];
+            if($data[3] <= 0){
+                return redirect()->route('books.create')
+                    ->with('error_message','Error karena jumlah buku tidak bisa negatif');
+            }
             $buku->save();
             return redirect()->route('books.index')
             ->with('success_message','Buku Ditambahkan.');
         } catch (Exception $e){
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), "Error pada user ketika menambahkan buku");
             return redirect()->route('books.index')
             ->with('error_message','Error ketika menambahkan');
-        } 
+        }
     }
 
     public function edit($id)
