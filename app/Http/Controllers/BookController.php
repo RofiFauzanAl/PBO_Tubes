@@ -35,7 +35,9 @@ class BookController extends Controller
             $buku->genreBuku = $data[2];
             $buku->jumlahBuku = $data[3];
             if($data[3] <= 0){
-                return redirect()->route('books.create')
+                return redirect()->route('books.create', [
+                    'buku' => $buku
+                ])
                     ->with('error_message','Error karena jumlah buku tidak bisa negatif');
             }
             $buku->save();
