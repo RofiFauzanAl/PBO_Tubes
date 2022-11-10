@@ -15,7 +15,9 @@ class CreateJumlahsTable extends Migration
     {
         Schema::create('jumlahs', function (Blueprint $table) {
             $table->id();
-            $table->string('jumlahBuku');
+            $table->string('nama_peminjam');
+            $table->string('namaBuku');
+            $table->integer('jumlahBuku');
             $table->timestamps();
         });
     }

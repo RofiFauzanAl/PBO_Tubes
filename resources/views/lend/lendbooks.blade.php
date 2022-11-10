@@ -29,7 +29,7 @@
                                 <td>{{$buk->genreBuku}}</td>
                                 <td>{{$buk->jumlahBuku}}</td>
                                 <td>
-                                    <form action="{{route('setUpdate', $buk)}}" method="post">
+                                    <form action="{{route('setUpdateBorrows', ['id' => $buk->id, 'user' => Auth::user()->id])}}" method="post">
                                         @method('PUT')
                                         @csrf
                                         <button type="submit" class="btn btn-primary">Pinjam</button>

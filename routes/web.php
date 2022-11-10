@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
-$lend = new \App\Http\Controllers\LendController();
 Route::get('/', function () {
     return view('welcome');
 });
@@ -28,9 +27,11 @@ Route::resource('books', \App\Http\Controllers\BookController::class)
     ->middleware('auth');
 
 // Untuk Meminjam
-Route::get('/borrows', '\App\Http\Controllers\LendController@index')->name('getIndex');
-Route::put('/borrows/{id}', '\App\Http\Controllers\LendController@update')->name('setUpdate');
+Route::get('/borrows', '\App\Http\Controllers\LendController@index')->name('getIndexBorrows')->middleware('auth');
+Route::put('/borrows/{id}/{user}', '\App\Http\Controllers\LendController@update')->name('setUpdateBorrows')->middleware('auth');
 
+// Route Untuk Melihat data Transaksi
+Route::get('/transaksi', '\App\Http\Controllers\TransaksiController@index')->name('getTransaksi')->middleware('auth');
 // Route::get('/borrows', $lend.index());
 
 // Route::post('/borrows/:id', \App\Http\Controllers\BookController::class);

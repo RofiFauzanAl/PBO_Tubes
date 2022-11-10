@@ -15,6 +15,11 @@ class CreateTransaksisTable extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_peminjam');
+            $table->string('namaBuku');
+            $table->integer('jumlahBuku');
+            $table->timestamp('tanggalPeminjaman');
+            $table->timestamp('tanggalPengembalian')->nullable();
             $table->timestamps();
         });
     }
