@@ -5,15 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\DataTables;
 use Exception;
+// use Yajra\DataTables\Contracts\DataTable;
 
 class BookController extends Controller
 {
-    public function index(){
-        $buku = Buku::all();
-        return view('books.indexbooks', [
-            'buku' => $buku
-        ]);
+    public function index(Request $request)
+    {
+        // $buku = Buku::all();
+        // return view('books.indexbooks', [
+        //     'buku' => $buku
+        // ]);
+        if ($request->ajax()) {
+            $buku = Buku::select('*');
+            return DataTables::of($buku)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row){
+                    $btn = '<a href= "' . route('books.edit', $row->id) . '" class="btn btn-primary btn-xs">Edit</a>';
+                    $btn = $btn . ' <a href="' 
+                                . route('books.destroy', $row->id)
+                                . '"class="btn btn-danger btn-xs" onclick="notificationBeforeDelete(event, this)">Hapus</a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }        
+        return view('books.indexbooks');
     }
 
     public function create()

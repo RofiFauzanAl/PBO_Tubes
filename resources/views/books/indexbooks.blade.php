@@ -16,34 +16,18 @@
                         Tambah Buku
                     </a>
 
-                    <table class="table table-hover table-bordered table-stripped" id="example2">
+                    <table class="table table-hover table-bordered table-stripped yajra-datatables" id="example2">
                         <thead>
                         <tr>
                             <th>No.</th>
                             <th>Nama Buku</th>
                             <th>Author</th>
                             <th>Genre Buku</th>
-                            <th>Jumlah Buku</th>
+                            <th>Edit</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($buku as $key => $buk)
-                            <tr>
-                                <td>{{$key+1}}</td>
-                                <td>{{$buk->namaBuku}}</td>
-                                <td>{{$buk->author}}</td>
-                                <td>{{$buk->genreBuku}}</td>
-                                <td>{{$buk->jumlahBuku}}</td>
-                                <td>
-                                    <a href="{{route('books.edit', $buk)}}" class="btn btn-primary btn-xs">
-                                        Edit
-                                    </a>
-                                    <a href="{{route('books.destroy', $buk)}}" onclick="notificationBeforeDelete(event, this)" class="btn btn-danger btn-xs">
-                                        Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
+                        
                         </tbody>
                     </table>
 
@@ -54,22 +38,64 @@
 @stop
 
 @push('js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+
     <form action="" id="delete-form" method="post">
         @method('delete')
         @csrf
     </form>
-    <script>
-        $('#example2').DataTable({
-            "responsive": true,
-        });
 
+
+    <script>
+        // $('#example2').DataTable({
+        //     "responsive": true,
+        // });
+
+        // function notificationBeforeDelete(event, el) {
+        //     event.preventDefault();
+        //     if (confirm('Apakah anda yakin akan menghapus data ? ')) {
+        //         $("#delete-form").attr('action', $(el).attr('href'));
+        //         $("#delete-form").submit();
+        //     }
+        // }
         function notificationBeforeDelete(event, el) {
             event.preventDefault();
-            if (confirm('Apakah anda yakin akan menghapus data ? ')) {
-                $("#delete-form").attr('action', $(el).attr('href'));
-                $("#delete-form").submit();
-            }
+            // sweet alert
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                console.log(result);
+                if (result.dismiss != 'cancel' && result) {
+                    $('#delete-form').attr('action', $(el).attr('href'));
+                    $('#delete-form').submit();
+                }
+            })
         }
 
+        $(function () {
+            var table = $('#example2').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('books.index') }}",
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'namaBuku', name: 'namaBuku'},
+                    {data: 'author', name: 'author'},
+                    {data: 'genreBuku', name: 'genreBuku'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+            
+        });
     </script>
 @endpush
