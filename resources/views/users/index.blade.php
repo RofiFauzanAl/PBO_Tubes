@@ -16,7 +16,7 @@
                         Tambah
                     </a>
 
-                    <table class="table table-hover table-bordered table-stripped" id="example2">
+                    <table class="table table-hover table-striped yajra-datatables" id="example2">
                         <thead>
                         <tr>
                             <th>No.</th>
@@ -26,21 +26,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($users as $key => $user)
-                            <tr>
-                                <td>{{$key+1}}</td>
-                                <td>{{$user->name}}</td>
-                                <td>{{$user->email}}</td>
-                                <td>
-                                    <a href="{{route('users.edit', $user)}}" class="btn btn-primary btn-xs">
-                                        Edit
-                                    </a>
-                                    <a href="{{route('users.destroy', $user)}}" onclick="notificationBeforeDelete(event, this)" class="btn btn-danger btn-xs">
-                                        Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
+                        
                         </tbody>
                     </table>
 
@@ -51,22 +37,64 @@
 @stop
 
 @push('js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+
+
     <form action="" id="delete-form" method="post">
         @method('delete')
         @csrf
     </form>
+    
     <script>
-        $('#example2').DataTable({
-            "responsive": true,
-        });
+        // $('#example2').DataTable({
+        //     "responsive": true,
+        // });
 
+        // function notificationBeforeDelete(event, el) {
+        //     event.preventDefault();
+        //     if (confirm('Apakah anda yakin akan menghapus data ? ')) {
+        //         $("#delete-form").attr('action', $(el).attr('href'));
+        //         $("#delete-form").submit();
+        //     }
+        // }
+        
         function notificationBeforeDelete(event, el) {
             event.preventDefault();
-            if (confirm('Apakah anda yakin akan menghapus data ? ')) {
-                $("#delete-form").attr('action', $(el).attr('href'));
-                $("#delete-form").submit();
-            }
+            // sweet alert
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!'
+            }).then((result) => {
+                console.log(result);
+                if (result.dismiss != 'cancel' && result) {
+                    $('#delete-form').attr('action', $(el).attr('href'));
+                    $('#delete-form').submit();
+                }
+            })
         }
 
+        $(function () {
+            var table = $('#example2').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('users.index') }}",
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'email', name: 'email'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+            
+        });
     </script>
 @endpush

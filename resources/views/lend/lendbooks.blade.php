@@ -18,6 +18,7 @@
                             <th>Nama Buku</th>
                             <th>Author</th>
                             <th>Genre Buku</th>
+                            <th>Jumlah Buku</th>
                         </tr>
                         </thead>
                         <tbody>
