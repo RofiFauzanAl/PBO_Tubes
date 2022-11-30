@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\ReportController;
+use Spatie\Activitylog\ActivityLogger;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,10 +37,10 @@ Route::get('/borrows/lendbooks', '\App\Http\Controllers\LendController@lendBooks
 Route::put('/borrows/lendbooks/{NIM}', '\App\Http\Controllers\LendController@insertLend')->name('setLend')->middleware('auth');
 
 // Route untuk Mengembalikan
-Route::get('/return', '\App\Http\Controllers\PengembalianController@index')->name('getIndexPengembalian')->middleware('auth');
-Route::post('/return/validate','\App\Http\Controllers\PengembalianController@checkValidate')->name('validate')->middleware('auth');
-Route::get('/return/peminjam', '\App\Http\Controllers\PengembalianController@getDataPeminjam')->name('getDataPeminjam')->middleware('auth');
-Route::put('/return/peminjam/{ID_Transaksi}','\App\Http\Controllers\PengembalianController@pengembalian')->name('setPengembalian')->middleware('auth');
+Route::get('/return', '\App\Http\Controllers\ReturnController@index')->name('getIndexPengembalian')->middleware('auth');
+Route::post('/return/validate','\App\Http\Controllers\ReturnController@checkValidate')->name('validate')->middleware('auth');
+Route::get('/return/peminjam', '\App\Http\Controllers\ReturnController@getDataPeminjam')->name('getDataPeminjam')->middleware('auth');
+Route::put('/return/peminjam/{ID_Transaksi}','\App\Http\Controllers\ReturnController@pengembalian')->name('setPengembalian')->middleware('auth');
 
 // Route Untuk Melihat data Transaksi
 Route::get('/transaksi', '\App\Http\Controllers\TransaksiController@index')->name('getTransaksi')->middleware('auth');
@@ -48,3 +51,7 @@ Route::get('/report', ReportController::class)->name('getTransaksiPrint')->middl
 Route::get('/home', function() {
     return view('home');
 })->name('home')->middleware('auth');
+
+Route::get('/logs', function () {
+    return activity()->log('Look mum, I logged something');
+});

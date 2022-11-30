@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Tambah User')
+@section('title', 'Tambah Buku')
 
 @section('content_header')
     <h1 class="m-0 text-dark">Tambah Buku</h1>

@@ -7,27 +7,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\DataTables;
 use Exception;
-// use Yajra\DataTables\Contracts\DataTable;
 
 class BookController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-        
+
             $buku = Buku::select('*');
             return DataTables::of($buku)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row){
                     $btn = '<a href= "' . route('books.edit', $row->id) . '" class="btn btn-primary btn-xs">Edit</a>';
-                    $btn = $btn . ' <a href="' 
+                    $btn = $btn . ' <a href="'
                                 . route('books.destroy', $row->id)
                                 . '"class="btn btn-danger btn-xs" onclick="notificationBeforeDelete(event, this)">Hapus</a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        }        
+        }
         return view('books.indexbooks');
     }
 
@@ -35,21 +34,15 @@ class BookController extends Controller
     {
         return view('books.insertbooks');
     }
-    
+
     public function store(Request $request){
         try{
             $buku = new Buku();
-            $data = [
-                $namaBuku = $request->input('namaBuku'),
-                $author = $request->input('author'),
-                $genreBuku = $request->input('genreBuku'),
-                $jumlahBuku = $request->input('jumlahBuku')
-            ];
-            $buku->namaBuku = $data[0];
-            $buku->author = $data[1];
-            $buku->genreBuku = $data[2];
-            $buku->jumlahBuku = $data[3];
-            if($data[3] <= 0){
+            $buku->namaBuku = $request->input('namaBuku');
+            $buku->author = $request->input('author');
+            $buku->genreBuku = $request->input('genreBuku');
+            $buku->jumlahBuku = $request->input('jumlahBuku');
+            if($request->input('jumlahBuku') <= 0){
                 return redirect()->route('books.create', [
                     'buku' => $buku
                 ])
@@ -59,22 +52,25 @@ class BookController extends Controller
             return redirect()->route('books.index')
             ->with('success_message','Buku Ditambahkan.');
         } catch (Exception $e){
-            Log::error($e->getMessage(), "Error pada user ketika menambahkan buku");
             return redirect()->route('books.index')
-            ->with('error_message','Error ketika menambahkan');
+            ->with('error_message','Error ketika menambahkan Buku');
         }
     }
 
     public function edit($id)
     {
-        $buku = Buku::find($id);
-        if (!$buku) return redirect()->route('books.index')
-            ->with('error_message', 'User dengan id '.$id.' tidak ditemukan');
-        return view('books.updatebooks', [
-            'buku' => $buku
-        ]);
+        try {
+            $buku = Buku::find($id);
+            if (!$buku) return redirect()->route('books.index')
+                ->with('error_message', 'User dengan id '.$id.' tidak ditemukan');
+            return view('books.updatebooks', [
+                'buku' => $buku
+            ]);
+        } catch (Exception $e) {
+            Log::error($e->getMessage(),'Error ketika mencari buku dengan id tersebut');
+        }
     }
-    
+
 
     public function update(Request $request, $id)
     {
@@ -86,7 +82,7 @@ class BookController extends Controller
         return redirect()->route('books.index')
             ->with('success_message', 'Berhasil mengubah Buku');
     }
-    
+
     public function destroy($id)
     {
         $buku = Buku::find($id);

@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'List Transaksi')
+@section('title', 'Transaksi')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">List User</h1>
+    <h1 class="m-0 text-dark">List Transaksi</h1>
 @stop
 
 @section('content')
@@ -79,7 +79,7 @@
                 ajax: "{{ route('getTransaksi') }}",
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'nama_peminjam', name: 'nama_peminjam'},
+                    {data: 'namaPeminjam', name: 'namaPeminjam'},
                     {data: 'namaBuku', name: 'namaBuku'},
                     {data: 'jumlahBuku', name: 'jumlahBuku'},
                     {data: 'tanggalPeminjaman', name: 'tanggalPeminjaman'},
