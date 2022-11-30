@@ -241,7 +241,7 @@ return [
         ],
         [
             'text' => 'Mengembalikan',
-            'url'  => '/returns',
+            'url'  => '/return',
             'icon'  => 'fa fa-plus',
         ],
         [

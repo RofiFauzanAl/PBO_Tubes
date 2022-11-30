@@ -11,26 +11,36 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-
-                    <a href="{{route('books.create')}}" class="btn btn-primary mb-2">
-                        Tambah Buku
-                    </a>
-
                     <table class="table table-hover table-bordered table-stripped yajra-datatables" id="example2">
                         <thead>
                         <tr>
                             <th>No.</th>
+                            <th>Nama Mahasiswa</th>
                             <th>Nama Buku</th>
-                            <th>Author</th>
-                            <th>Genre Buku</th>
-                            <th>Edit</th>
+                            <th>Jumlah Buku</th>
+                            <th>Tanggal Peminjaman</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
-
+                            @foreach($transaksi as $key => $transaksi)
+                            <tr>
+                                <td>{{$key+1}}</td>
+                                <td>{{$transaksi->nama_peminjam}}</td>
+                                <td>{{$transaksi->namaBuku}}</td>
+                                <td>{{$transaksi->jumlahBuku}}</td>
+                                <td>{{$transaksi->tanggalPeminjaman}}</td>
+                                <td>
+                                    <form action="{{route('setPengembalian', $transaksi->id)}}" method="post">
+                                        @method('PUT')
+                                        @csrf
+                                        <button type="submit" class="btn btn-primary">Kembalikan</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
@@ -70,20 +80,5 @@
                 }
             })
         }
-
-        $(function () {
-            var table = $('#example2').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('books.index') }}",
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'namaBuku', name: 'namaBuku'},
-                    {data: 'author', name: 'author'},
-                    {data: 'genreBuku', name: 'genreBuku'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-                ]
-            });
-        });
     </script>
 @endpush

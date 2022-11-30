@@ -11,7 +11,7 @@ class transaksi extends Model
 
     protected $table = 'transaksis';
     protected $fillable = [
-        'namaPeminjam',
+        'nama_peminjam',
         'namaBuku',
         'jumlahBuku',
         'tanggalPeminjaman',

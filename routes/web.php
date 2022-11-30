@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Buku;
-use Illuminate\Http\Request;
+use \App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,21 +19,31 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// User
 Route::resource('users', \App\Http\Controllers\UserController::class)
     ->middleware('auth');
 
+// Books
 Route::resource('books', \App\Http\Controllers\BookController::class)
     ->middleware('auth');
 
-// Untuk Meminjam
+// Route Untuk Meminjam
 Route::get('/borrows', '\App\Http\Controllers\LendController@index')->name('getIndexBorrows')->middleware('auth');
-Route::put('/borrows/{id}/{user}', '\App\Http\Controllers\LendController@update')->name('setUpdateBorrows')->middleware('auth');
+Route::post('/borrows/validate', '\App\Http\Controllers\LendController@checkValidate')->name('validateMahasiswa')->middleware('auth');
+Route::get('/borrows/lendbooks', '\App\Http\Controllers\LendController@lendBooksIndex')->name('getLendBooks')->middleware('auth');
+Route::put('/borrows/lendbooks/{NIM}', '\App\Http\Controllers\LendController@insertLend')->name('setLend')->middleware('auth');
+
+// Route untuk Mengembalikan
+Route::get('/return', '\App\Http\Controllers\PengembalianController@index')->name('getIndexPengembalian')->middleware('auth');
+Route::post('/return/validate','\App\Http\Controllers\PengembalianController@checkValidate')->name('validate')->middleware('auth');
+Route::get('/return/peminjam', '\App\Http\Controllers\PengembalianController@getDataPeminjam')->name('getDataPeminjam')->middleware('auth');
+Route::put('/return/peminjam/{ID_Transaksi}','\App\Http\Controllers\PengembalianController@pengembalian')->name('setPengembalian')->middleware('auth');
 
 // Route Untuk Melihat data Transaksi
 Route::get('/transaksi', '\App\Http\Controllers\TransaksiController@index')->name('getTransaksi')->middleware('auth');
-// Route::get('/borrows', $lend.index());
 
-// Route::post('/borrows/:id', \App\Http\Controllers\BookController::class);
+// Route untuk print data Transaksi
+Route::get('/report', ReportController::class)->name('getTransaksiPrint')->middleware('auth');
 
 Route::get('/home', function() {
     return view('home');

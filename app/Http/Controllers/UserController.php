@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -12,12 +13,30 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */ 
-    public function index()
+    // public function index()
+    // {
+    //     $users = User::all();
+    //     return view('users.index', [
+    //         'users' => $users
+    //     ]);
+    // }
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('users.index', [
-            'users' => $users
-        ]);
+        if ($request->ajax()) {
+            $users = User::select('*');
+            return DataTables::of($users)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="' . route('users.edit', $row->id) . '" class="btn btn-sm text-primary"><i class="fas fa-pen"></i></a>';
+                    $btn = $btn . ' <a href="' 
+                            . route('users.destroy', $row->id) 
+                            . '" class="btn btn-sm text-danger"  onclick="notificationBeforeDelete(event, this)"><i class="fas fa-trash" aria-hidden="true"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('users.index');
     }
 
     /**
@@ -50,7 +69,6 @@ class UserController extends Controller
         $user = User::create($array);
         return redirect()->route('users.index')
             ->with('success_message', 'Berhasil menambah user baru');
-
     }
 
     /**

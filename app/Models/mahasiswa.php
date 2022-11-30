@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Buku extends Model
+class mahasiswa extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Buku extends Model
      *
      * @var array
      */
-    protected $table = 'buku';
+    protected $table = 'mahasiswa';
 
     /**
      * The attributes that are mass assignable.
@@ -22,9 +22,7 @@ class Buku extends Model
      * @var array
      */
     protected $fillable = [
-        'namaBuku',
-        'author',
-        'genreBuku',
-        'jumlahBuku',
+        'NIM',
+        'Nama',
     ];
 }
